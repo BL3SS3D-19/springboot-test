@@ -25,8 +25,10 @@ public class Producto {
     @Min(value = 0, message = "La cantidad debe ser mayor a 0")
     private int cantidad;
 
+    //Contructor vacio
     public Producto(){}
 
+    //Constructor con parametros
     public Producto(Long id, String nombre, double precio, int cantidad) {
         this.id = id;
         this.nombre = nombre;

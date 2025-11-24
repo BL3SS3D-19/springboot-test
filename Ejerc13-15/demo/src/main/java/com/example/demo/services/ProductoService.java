@@ -6,6 +6,8 @@ import org.aspectj.apache.bcel.Repository;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.entities.Producto;
+import com.example.demo.exceptions.PrecioInvalidException;
+import com.example.demo.exceptions.ProductosNotFoundException;
 import com.example.demo.repositories.ProductoRepository;
 
 
@@ -31,7 +33,7 @@ public class ProductoService {
         if(precio >= 0) {
             producto.setPrecio(precio);
         }else{
-            throw new RuntimeException("Ell precio no puede ser negativo");
+            throw new PrecioInvalidException("Ell precio no puede ser negativo");
         }
         producto.setCantidad(cantidad);
         return repository.save(producto);
@@ -40,18 +42,27 @@ public class ProductoService {
     //Busca un producto por su ID
     public Producto getById(Long id) {
         return repository.findById(id).
-        orElseThrow(()-> new RuntimeException("Producto no encontrado"));
+        orElseThrow(()-> new ProductosNotFoundException("Producto no encontrado"));
     }
     
     //Guardamos el producto
-    public Producto save(Producto producto){
-        return repository.save(producto);
+    public Producto save(Producto producto) {
+    if (producto == null) {
+        throw new IllegalArgumentException("El producto no puede ser null");
     }
+
+    if (producto.getPrecio() < 0) {
+        throw new PrecioInvalidException("El precio no puede ser negativo");
+    }
+
+    return repository.save(producto);
+}
+
     
     //Actualiza un producto existente
     public Producto update(Long id, String nombre, Double precio, Integer cantidad) {
         Producto productoExistente = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Producto no encontrado con id: " + id));
+                .orElseThrow(() -> new ProductosNotFoundException("Producto no encontrado con id: " + id));
 
         // Creamos un nuevo objeto internamente y mantenemos el mismo ID
         Producto productoActualizado = new Producto();
@@ -60,11 +71,19 @@ public class ProductoService {
         productoActualizado.setPrecio(precio != null ? precio : productoExistente.getPrecio());
         productoActualizado.setCantidad(cantidad != null ? cantidad : productoExistente.getCantidad());
 
+        if (productoActualizado.getPrecio() < 0) {
+            throw new PrecioInvalidException("El precio no puede ser negativo");
+        }
+
         return repository.save(productoActualizado);
     }
     
     // Funcion para eliminar productos
     public void delete(Long id) {
+        if (!repository.existsById(id)) {
+            throw new ProductosNotFoundException("Producto no encontrado con id: " + id);
+        }
+        
         repository.deleteById(id);
     }
 

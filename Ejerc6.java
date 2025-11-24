@@ -18,7 +18,7 @@ public class Ejerc6 {
         }
 
         
-        
+        //Segun la nota determinamos su valor con las letras A,B,C,D y E
         switch(numero) {
             case 10:
             case 9:

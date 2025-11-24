@@ -2,6 +2,8 @@
 import java.lang.reflect.Array;
 
 public class PracticaArrays {
+    
+    //Funcion para determinar el valor maximo
     public static int findMax(int[] numeros) {
         int max = numeros[0];
 
@@ -13,6 +15,8 @@ public class PracticaArrays {
         return max;
     }
 
+
+    //Funcion para determinar el valor minimo
     public static int findMin(int[] numeros) {
         int min = numeros[0];
 

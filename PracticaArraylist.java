@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 public class PracticaArraylist {
     
+    //Funcion para añadir nombres al array o parar la ejecucion con la palabra "stop"
     public static void addNombres(ArrayList<String> nombres) {
         
         System.out.println("Introduce un nombre o stop para terminar el programa");
